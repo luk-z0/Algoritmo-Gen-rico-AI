@@ -70,9 +70,7 @@ public class AlgoritmoGenerico {
     public Individuo mutacao(Individuo filho) {
 
         Random r = new Random();
-        filho = new Individuo(filho.getX1() * r.nextDouble(100)
-        , filho.getX1()
-        , filho.getFit());
+        filho = new Individuo(filho.getX1(), r.nextDouble(this.random()), filho.getFit());
 
         return filho;
     }
