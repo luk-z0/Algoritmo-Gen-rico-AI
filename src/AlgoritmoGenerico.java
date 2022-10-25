@@ -30,14 +30,21 @@ public class AlgoritmoGenerico {
         Random r = new Random();
         int index1 = r.nextInt(populacao.size() - 1);
         int index2 = r.nextInt(populacao.size() - 1);
-        // int index3 = r.nextInt(populacao.size() - 1);
+        int index3 = r.nextInt(populacao.size() - 1);
         Individuo individuo1 = populacao.get(index1);
         Individuo individuo2 = populacao.get(index2);
-        // Individuo individuo3 = populacao.get(index3);
+        Individuo individuo3 = populacao.get(index3);
 
-        if (individuo1.getFit() > individuo2.getFit())
+        if (individuo1.getFit() > individuo2.getFit()
+                && individuo1.getFit() > individuo3.getFit()) {
             return individuo1;
-        return individuo2;
+
+        } else if (individuo2.getFit() > individuo1.getFit()
+                && individuo2.getFit() > individuo3.getFit()) {
+            return individuo2;
+        } else {
+            return individuo3;
+        }
 
     }
 
@@ -61,6 +68,11 @@ public class AlgoritmoGenerico {
     }
 
     public Individuo mutacao(Individuo filho) {
+
+        Random r = new Random();
+        filho = new Individuo(filho.getX1() * r.nextDouble(100)
+        , filho.getX1()
+        , filho.getFit());
 
         return filho;
     }
