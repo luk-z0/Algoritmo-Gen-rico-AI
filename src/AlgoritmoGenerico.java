@@ -102,16 +102,29 @@ public class AlgoritmoGenerico {
         Random r = new Random();
         ArrayList<Individuo> populacaoNova = new ArrayList<>();
         Individuo individuoSelecionado = this.elitismo(populacao);
+        int chanceMutacao;
+        int indexMutante;
+
         populacaoNova.add(0, individuoSelecionado);
 
         for (int i = 1; i < populacao.size(); i++) {
-            if (populacaoNova.size() > populacao.size()) {
-                populacaoNova.remove(populacaoNova.size());
-            }
-            int aux = r.nextInt(100);
-            ArrayList<Individuo> filhos = this.cruzamento();
 
-            
+            // if (populacaoNova.size() > populacao.size()) {
+            // populacaoNova.
+            // }
+
+            chanceMutacao = r.nextInt(101);
+
+            ArrayList<Individuo> filhos = this.cruzamento(populacao.get(r.nextInt(populacao.size())),
+                    populacao.get(r.nextInt(populacao.size())));
+ 
+            indexMutante = r.nextInt(2);
+            if (chanceMutacao >= 5) {
+                Individuo mutante = this.mutacao(filhos.get(indexMutante));
+                filhos.set(indexMutante, mutante);
+                
+            }
+
         }
 
         return populacaoNova;
