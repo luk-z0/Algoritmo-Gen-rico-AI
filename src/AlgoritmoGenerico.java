@@ -10,8 +10,7 @@ public class AlgoritmoGenerico {
     }
 
     private double funcao(double x1, double x2) {
-        return x1 - x2;
-        // return (x1 - Math.log(x2)) / ((Math.pow(x1, 2)) - (3 * x2));
+        return (x1 - Math.log(x2)) / ((Math.pow(x1, 2)) - (3 * x2));
     }
 
     public ArrayList<Individuo> populacao(int n) {
