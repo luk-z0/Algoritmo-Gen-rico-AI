@@ -72,7 +72,7 @@ public class AlgoritmoGenerico {
         Random randomX = new Random();
         Random randomValueX = new Random();
 
-        int aux = randomX.nextInt(1);
+        int aux = randomX.nextInt(2);
         double valueX = randomValueX.nextDouble(this.random());
 
         if (aux == 0) {
@@ -87,9 +87,9 @@ public class AlgoritmoGenerico {
     }
 
     public Individuo elitismo(ArrayList<Individuo> populacao) {
-        Individuo individuoSelecionado = this.selecao(populacao);
-
+        Individuo individuoSelecionado = null;
         for (int i = 0; i < populacao.size(); i++) {
+            individuoSelecionado = this.selecao(populacao);
             if (populacao.get(i).getFit() > individuoSelecionado.getFit()) {
                 individuoSelecionado = populacao.get(i);
             }
@@ -98,35 +98,35 @@ public class AlgoritmoGenerico {
         return individuoSelecionado;
     }
 
-    public ArrayList<Individuo> populacaoNova(ArrayList<Individuo> populacao) {
+    public ArrayList<Individuo> populacaoNova(ArrayList<Individuo> populacaoInicial) {
         Random r = new Random();
         ArrayList<Individuo> populacaoNova = new ArrayList<>();
-        Individuo individuoSelecionado = this.elitismo(populacao);
+        Individuo individuoSelecionado = this.elitismo(populacaoInicial);
         int chanceMutacao;
         int indexMutante;
 
         populacaoNova.add(0, individuoSelecionado);
 
-        for (int i = 1; i < populacao.size(); i++) {
+        for (int i = 1; i < populacaoInicial.size(); i++) {
 
-            // if (populacaoNova.size() > populacao.size()) {
-            // populacaoNova.
-            // }
+            ArrayList<Individuo> filhos = this.cruzamento(populacaoInicial.get(r.nextInt(populacaoInicial.size())),
+                    populacaoInicial.get(r.nextInt(populacaoInicial.size())));
 
             chanceMutacao = r.nextInt(101);
-
-            ArrayList<Individuo> filhos = this.cruzamento(populacao.get(r.nextInt(populacao.size())),
-                    populacao.get(r.nextInt(populacao.size())));
- 
             indexMutante = r.nextInt(2);
-            if (chanceMutacao >= 5) {
+
+            if (chanceMutacao <= 5) {
                 Individuo mutante = this.mutacao(filhos.get(indexMutante));
                 filhos.set(indexMutante, mutante);
-                
+
             }
+
+            populacaoNova.addAll(i, filhos);
 
         }
 
+        populacaoNova.subList(populacaoInicial.size(),
+        populacaoNova.size()).clear();
         return populacaoNova;
 
     }
