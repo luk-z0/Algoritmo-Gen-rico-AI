@@ -4,43 +4,41 @@ import java.util.Random;
 public class AlgoritmoGenerico {
 
     private double random() {
-
         double MIN = -100000.0f;
         double MAX = 100000.0f;
         return (MAX - MIN) + MIN;
     }
 
     private double funcao(double x1, double x2) {
-        return (x1 - Math.log(x2)) / (Math.pow(x1, 2) - 3 * x2);
+        return x1 - x2;
+        // return (x1 - Math.log(x2)) / ((Math.pow(x1, 2)) - (3 * x2));
     }
 
     public ArrayList<Individuo> populacao(int n) {
-        ArrayList<Individuo> popupalcao = new ArrayList<>();
+        ArrayList<Individuo> populacao = new ArrayList<>();
         Random r = new Random();
         for (int i = 0; i < n; i++) {
             double x1 = r.nextDouble(this.random());
             double x2 = r.nextDouble(this.random());
             double fitness = this.funcao(x1, x2);
-            popupalcao.add(new Individuo(x1, x2, fitness));
+            populacao.add(new Individuo(x1, x2, fitness));
         }
-        return popupalcao;
+        return populacao;
     }
 
     public Individuo selecao(ArrayList<Individuo> populacao) {
         Random r = new Random();
-        int index1 = r.nextInt(populacao.size());
-        int index2 = r.nextInt(populacao.size());
-        int index3 = r.nextInt(populacao.size());
-        Individuo individuo1 = populacao.get(index1);
-        Individuo individuo2 = populacao.get(index2);
-        Individuo individuo3 = populacao.get(index3);
 
-        if (individuo1.getFit() > individuo2.getFit()
-                && individuo1.getFit() > individuo3.getFit()) {
+        Individuo individuo1 = populacao.get(r.nextInt(populacao.size()));
+        Individuo individuo2 = populacao.get(r.nextInt(populacao.size()));
+        Individuo individuo3 = populacao.get(r.nextInt(populacao.size()));
+
+        if (individuo1.getFit() >= individuo2.getFit()
+                && individuo1.getFit() >= individuo3.getFit()) {
             return individuo1;
 
-        } else if (individuo2.getFit() > individuo1.getFit()
-                && individuo2.getFit() > individuo3.getFit()) {
+        } else if (individuo2.getFit() >= individuo1.getFit()
+                && individuo2.getFit() >= individuo3.getFit()) {
             return individuo2;
         } else {
             return individuo3;
@@ -87,10 +85,10 @@ public class AlgoritmoGenerico {
     }
 
     public Individuo elitismo(ArrayList<Individuo> populacao) {
-        Individuo individuoSelecionado = null;
+        Individuo individuoSelecionado = new Individuo(0, 0, 0);
         for (int i = 0; i < populacao.size(); i++) {
             individuoSelecionado = this.selecao(populacao);
-            if (populacao.get(i).getFit() > individuoSelecionado.getFit()) {
+            if (populacao.get(i).getFit() >= individuoSelecionado.getFit()) {
                 individuoSelecionado = populacao.get(i);
             }
         }
@@ -124,11 +122,40 @@ public class AlgoritmoGenerico {
             populacaoNova.addAll(i, filhos);
 
         }
-
         populacaoNova.subList(populacaoInicial.size(),
-        populacaoNova.size()).clear();
+                populacaoNova.size()).clear();
+
         return populacaoNova;
 
     }
 
+    public void selecaoNatural(ArrayList<Individuo> populacaoInicial, int qtdGeracao) {
+        int count = 0;
+        ArrayList<Individuo> populacaoNova = new ArrayList<>();
+
+        for (Individuo individuo : populacaoInicial) {
+            System.out.println("Gerações Inicial" + " - Individuo " + count + " - " + individuo);
+            count++;
+        }
+
+        count = 0;
+        System.out.println("\n");
+
+        for (int i = 0; i < qtdGeracao; i++) {
+            populacaoNova = this.populacaoNova(populacaoInicial);
+            for (Individuo individuo : populacaoNova) {
+                System.out.println("Gerações " + i + " - Individuo " + count + " - " + individuo);
+                count++;
+            }
+            System.out
+                    .println("\nIndividuo mais apto da geração : " + (count - 1) + " " + this.elitismo(populacaoNova));
+            count = 0;
+            populacaoInicial.clear();
+            populacaoInicial.addAll(populacaoNova);
+            populacaoNova.clear();
+
+            System.out.println("\n");
+        }
+
+    }
 }
